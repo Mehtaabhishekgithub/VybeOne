@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const SignIn = () => {
-
+ const [error, seterror] = useState("")
   const [inputClicked, setInputClicked] = useState({
     userName: false,
     password: false
@@ -31,6 +31,7 @@ const navigate = useNavigate();
 const handleSignIn=async ()=>{
   try {
     setloading(true)
+    seterror("")
     const result = await axios.post(`${serverUrl}/api/auth/signin`,
       {userName,password},{withCredentials:true})
       console.log(result.data);
@@ -39,6 +40,7 @@ const handleSignIn=async ()=>{
     catch (error) {
     console.log("signin error",error);
     setloading(false)
+    seterror(error.response?.data?.message)
   }
 
 }
@@ -96,8 +98,15 @@ return (
                   setshowPassword(false)
                 }}
                  className='absolute right-[20px] cursor-pointer w-[25px] h-[25px]'/>}
-               
-             </div>
+               </div>
+               <div 
+               onClick={()=>{
+                navigate("/forgotpassword")
+               }}
+               className='w-[90%] px-[20px] cursor-pointer'>
+                Forgot Password?
+               </div>
+                {error && <p className='text-red-500'>{error}</p>}
 
           {/* submit button */}
           <button
@@ -110,10 +119,7 @@ return (
              onClick={()=>navigate('/signup')}
              className=' pb-[3px]  text-blue-500'>SignUp</span></p>
           </div>
-        
-
-
-
+         
         {/* logo wala div */}
         <div className='md:w-[50%] h-full hidden lg:flex justify-center items-center bg-[#000000] 
         flex-col gap-[10px] text-white text-[16px] font-semibold rounded-l-[30px] shadow-2xl shadow-black'>

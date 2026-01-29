@@ -24,6 +24,7 @@ const SignUp = () => {
 
 const [showPassword, setshowPassword] = useState(false)
 const [loading, setloading] = useState(false)
+const [error, seterror] = useState("")
 
 const [name, setname] = useState("")
 const [userName, setuserName] = useState("")
@@ -34,6 +35,7 @@ const navigate = useNavigate();
 const handleSignup=async ()=>{
   try {
     setloading(true)
+    seterror("")
     const result = await axios.post(`${serverUrl}/api/auth/signup`,
       {name,userName,email,password},{withCredentials:true})
       console.log(result.data);
@@ -42,6 +44,7 @@ const handleSignup=async ()=>{
     catch (error) {
     console.log("signup error",error);
     setloading(false)
+    seterror(error.response?.data?.message)
   }
 
 }
@@ -127,6 +130,7 @@ return (
                  className='absolute right-[20px] cursor-pointer w-[25px] h-[25px]'/>}
                
              </div>
+            {error && <p className='text-red-500'>{error}</p>}
 
           {/* submit button */}
           <button
