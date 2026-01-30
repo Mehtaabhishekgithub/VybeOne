@@ -7,6 +7,8 @@ import axios from "axios"
 import { serverUrl } from '../App';
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from 'react-router-dom';
+import {useDispatch} from "react-redux"
+import { setUserData } from '../redux/userSlice';
 
 
 
@@ -31,6 +33,7 @@ const [userName, setuserName] = useState("")
 const [email, setemail] = useState("")
 const [password, setpassword] = useState("")
 const navigate = useNavigate();
+const dispatch = useDispatch();
 
 const handleSignup=async ()=>{
   try {
@@ -38,7 +41,7 @@ const handleSignup=async ()=>{
     seterror("")
     const result = await axios.post(`${serverUrl}/api/auth/signup`,
       {name,userName,email,password},{withCredentials:true})
-      console.log(result.data);
+      dispatch(setUserData(result.data))
       setloading(false)
     } 
     catch (error) {
